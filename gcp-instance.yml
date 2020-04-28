@@ -1,0 +1,14 @@
+imports:
+  - path: gcp-instance.jinja
+resources:
+  - name: vm-gdg-meetup
+    type: gcp-instance.jinja
+    properties:
+      zone: us-central1-a
+      project: wwcode-terraform-admin
+      network: default
+      sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-7-wheezy-v20150423
+      vm_name: vm-gdg-meetup-plantilla
+      fw_name: fw-allow-http-plantilla
+      tags: ["http"]
+      machine_type: f1-micro

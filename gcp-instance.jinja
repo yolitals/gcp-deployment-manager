@@ -1,0 +1,30 @@
+resources:
+    - name: {{ properties["vm_name"] }}
+      type: compute.v1.instance
+      properties:
+        tags:
+          items: {{ properties["tags"] }}
+        zone: {{ properties["zone"] }}
+        machineType: https://www.googleapis.com/compute/v1/projects/{{ properties["project"] }}/zones/us-central1-a/machineTypes/{{ properties["machine_type"] }}
+        disks:
+        - deviceName: boot
+          type: PERSISTENT
+          boot: true
+          autoDelete: true
+          initializeParams:
+            sourceImage: {{ properties["sourceImage"] }}
+        networkInterfaces:
+        - network: projects/{{ properties["project"] }}/global/networks/{{ properties["network"] }}
+          accessConfigs:
+          - name: External NAT
+            type: ONE_TO_ONE_NAT
+    - name: {{ properties["fw_name"] }}
+      type: compute.v1.firewall
+      properties:
+        targetTags: {{ properties["tags"] }}
+        allowed:
+          - IPProtocol: TCP
+            ports: [80]
+        sourceRanges: [ 0.0.0.0/0 ]
+
+       # gcloud deployment-manager deployments update example-config --config gcp-instance.yml --preview
